@@ -23,12 +23,13 @@ public class TestConnection {
         }
     }
     
-    private TrustManager[ ] get_trust_mgr() {
+    private TrustManager[ ] getTrustManager() {
      TrustManager[ ] certs = new TrustManager[ ] {
         new X509TrustManager() {
-           public X509Certificate[ ] getAcceptedIssuers() { return null; }
-           public void checkClientTrusted(X509Certificate[ ] certs, String t) { }
-           public void checkServerTrusted(X509Certificate[ ] certs, String t) { }
+		public X509Certificate[ ] getAcceptedIssuers() { return null; }
+		public void checkServerTrusted(X509Certificate[ ] certs, String t) { }
+		public void checkClientTrusted(X509Certificate[ ] certs, String t) { }
+          
          }
       };
       return certs;
@@ -37,19 +38,18 @@ public class TestConnection {
     private void testConnection() throws MalformedURLException, IOException {
         
         String authStringEnc = "";
-        TrustManager[] trustAllCerts = get_trust_mgr();
+        TrustManager[] trustAllCerts = getTrustManager();
         
         try {
 			String name = ".....";
 			String password = "....";
 			
 			String authString = name + ":" + password;
-			System.out.println("auth string: " + authString);
+			
 			byte[] authEncBytes = Base64.encodeBase64(authString.getBytes());
 			
 			authStringEnc = new String(authEncBytes);
-			System.out.println("Base64 encoded auth string: " + authStringEnc);
-			
+		
 			SSLContext sc = SSLContext.getInstance("SSL");
 			sc.init(null, trustAllCerts, new java.security.SecureRandom());
 			
@@ -76,11 +76,8 @@ public class TestConnection {
         while ((numCharsRead = isr.read(charArray)) > 0) {
             sb.append(charArray, 0, numCharsRead);
         }
-        //String result = sb.toString();
-
-        System.out.println("*** BEGIN ***");
-        //System.out.println(result);
-        System.out.println("*** END ***");
+	
+        //System.out.println(sb.toString());
         
     }
 }
